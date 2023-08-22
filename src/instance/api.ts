@@ -2,7 +2,7 @@ import { store } from "@/redux/store";
 import axios, { InternalAxiosRequestConfig } from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://graham-backend.vercel.app",
 });
 
 export default api;
