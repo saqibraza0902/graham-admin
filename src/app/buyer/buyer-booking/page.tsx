@@ -54,7 +54,7 @@ const Buyer = () => {
           prof={profile}
           tabTitle="Order Booked"
         >
-          <BookingTable page={Number(page)} orders={orders} />
+          <BookingTable orders={orders} />
         </BuyerLayout>
       ) : (
         <Loader />
