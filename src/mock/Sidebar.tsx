@@ -1,4 +1,4 @@
-import { logoutAction } from "@/redux/slices/auth";
+import { logoutAction } from '@/redux/slices/auth';
 import {
   CashIcon,
   Categories,
@@ -6,11 +6,11 @@ import {
   LogoutIcon,
   Persons,
   ProductIcon,
-} from "@/ui/icons/all-icons";
-import { Person } from "@/ui/icons/all-icons/Person";
-import { URLS } from "@/utils/URLS";
-import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
+} from '@/ui/icons/all-icons';
+import { Person } from '@/ui/icons/all-icons/Person';
+import { URLS } from '@/utils/URLS';
+import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
 
 export const SidebarContent = () => {
   const dispatch = useDispatch();
@@ -18,73 +18,79 @@ export const SidebarContent = () => {
   const SidebarData = [
     {
       icon: <Dashboard />,
-      title: "Dashboard",
+      title: 'Dashboard',
       prefix: URLS.HOME,
       pathname: URLS.HOME,
     },
     {
       icon: <Persons />,
-      title: "Seller",
-      prefix: "seller",
+      title: 'Seller',
+      prefix: 'seller',
       pathname: URLS.SELLER,
     },
     {
       icon: <Person />,
-      title: "Buyer",
-      prefix: "buyer",
+      title: 'Buyer',
+      prefix: 'buyer',
       pathname: URLS.BUYER,
     },
     {
       icon: <Categories />,
-      title: "Categories",
-      prefix: "categories",
+      title: 'Categories',
+      prefix: 'categories',
       pathname: URLS.CATEGORIES,
     },
     {
       icon: <ProductIcon />,
-      title: "Post Ads",
-      prefix: "post-ads",
+      title: 'Post Ads',
+      prefix: 'post-ads',
       pathname: URLS.POST_ADS,
     },
     {
       icon: <Persons />,
-      title: "Brands",
-      prefix: "brand",
+      title: 'Brands',
+      prefix: 'brand',
       pathname: URLS.BRAND,
     },
     {
       icon: <Persons />,
-      title: "Orders",
+      title: 'Orders',
       prefix: URLS.ORDERS,
       pathname: URLS.ORDERS,
     },
     {
       icon: <CashIcon />,
-      title: "Payment Orders",
+      title: 'Payout Requests',
+      prefix: 'payout-requests',
+      pathname: URLS.PAYOUT_REQUESTS,
+    },
+    {
+      icon: <CashIcon />,
+      title: 'Payment Orders',
       prefix: URLS.PAYMENT_ORDERS,
       pathname: URLS.PAYMENT_ORDERS,
     },
     {
       icon: <CashIcon />,
-      title: "Payment Plans",
+      title: 'Payment Plans',
       prefix: URLS.PAYMENT_PLANS,
       pathname: URLS.PAYMENT_PLANS,
     },
     {
       icon: <Persons />,
-      title: "Taxes",
-      prefix: "taxes",
+      title: 'Taxes',
+      prefix: 'taxes',
       pathname: URLS.TAXES,
     },
     {
       icon: <Persons />,
-      title: "Subscription",
-      prefix: "subscription",
+      title: 'Subscription',
+      prefix: 'subscription',
       pathname: URLS.SUBSCRIPTION,
     },
     {
       icon: <LogoutIcon />,
-      title: "Logout",
+      title: 'Logout',
       action: () => {
         dispatch(logoutAction());
         router.push(URLS.HOME);

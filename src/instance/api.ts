@@ -1,8 +1,8 @@
-import { store } from "@/redux/store";
-import axios, { InternalAxiosRequestConfig } from "axios";
+import { store } from '@/redux/store';
+import axios, { InternalAxiosRequestConfig } from 'axios';
 
 const api = axios.create({
-  baseURL: "https://graham-backend.vercel.app",
+  baseURL: 'https://graham-backend.vercel.app',
 });
 
 export default api;
@@ -12,7 +12,7 @@ api.interceptors.request.use(
     const accessToken = store.getState().auth?.token;
     // const accessToken = Cookies.get('access_token');
     // eslint-disable-next-line no-param-reassign
-    config.headers.Authorization = accessToken ? `Bearer ${accessToken}` : "";
+    config.headers.Authorization = accessToken ? `Bearer ${accessToken}` : '';
 
     return Promise.resolve(config);
   },

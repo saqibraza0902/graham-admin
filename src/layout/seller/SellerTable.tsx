@@ -1,20 +1,34 @@
-/* eslint-disable @next/next/no-img-element */
-import { useAppDispatch } from "@/redux/hooks";
-import { setSellerID } from "@/redux/slices/sellerslice";
-import ImageWithFallback from "@/ui/components/ImgComponent";
-import FormattedDate from "@/ui/components/formatteddate";
-import NotFound from "@/ui/components/notfound";
-import { MoreIcon, Verified } from "@/ui/icons";
-import { URLS } from "@/utils/URLS";
+import ImageWithFallback from '@/ui/components/ImgComponent';
+import FormattedDate from '@/ui/components/formatteddate';
+import NotFound from '@/ui/components/notfound';
+import { MoreIcon, Verified } from '@/ui/icons';
+import { URLS } from '@/utils/URLS';
 import {
   SellerRowProduct,
   SellerRowProps,
   SellerTableProps,
   SellerTableSellerSection,
-} from "@/utils/types";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-
+} from '@/utils/types';
+import React, { useState } from 'react';
+import Menu from '../Menu';
+const DROPARRAY = [
+  {
+    title: ' View Profile',
+    path: URLS.SELLER_PROFILE,
+  },
+  {
+    title: ' View Products',
+    path: URLS.SELLER_PRODUCTS,
+  },
+  {
+    title: ' View Bookings',
+    path: URLS.SELLER_BOOKING,
+  },
+  {
+    title: ' View Invoice',
+    path: URLS.SELLER_INVOICE,
+  },
+];
 const SellerTable = ({ data, page }: SellerTableProps) => {
   const [openRowIndex, setOpenRowIndex] = useState<number | null>(null);
   const handleRowClick = (index: number) => {
@@ -94,7 +108,7 @@ const TableRow = ({
           <FormattedDate date={item.createdAt} />
         </td>
         <td className="px-4 pt-10  h-full flex justify-center items-center">
-          <Verified color={item.varified ? "#0062FF" : "D0E7DC"} />
+          <Verified color={item.varified ? '#0062FF' : 'D0E7DC'} />
         </td>
         <td
           onClick={handleClick}
@@ -104,8 +118,12 @@ const TableRow = ({
             <MoreIcon />
           </div>
           {open && (
-            <div className="absolute top-11 right-7">
-              <Dropdown id={item._id} />
+            <div className="absolute -top-11 right-7">
+              <Menu
+                DropArray={DROPARRAY}
+                onClose={handleClick}
+                seller_id={item._id}
+              />
             </div>
           )}
         </td>
@@ -136,50 +154,7 @@ const SellerSection = ({ email, name, profile }: SellerTableSellerSection) => {
     </div>
   );
 };
-const DROPARRAY = [
-  {
-    title: " View Profile",
-    path: URLS.SELLER_PROFILE,
-  },
-  {
-    title: " View Products",
-    path: URLS.SELLER_PRODUCTS,
-  },
-  {
-    title: " View Bookings",
-    path: URLS.SELLER_BOOKING,
-  },
-  {
-    title: " View Invoice",
-    path: URLS.SELLER_INVOICE,
-  },
-];
-interface DropProps {
-  id: string;
-}
-const Dropdown = ({ id }: DropProps) => {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
-  const handleDropClick = (path: string) => {
-    dispatch(setSellerID(id));
-    router.push(`${path}?page=1`);
-  };
-  return (
-    <div className="bg-white shadow-2xl rounded-xl relative !z-10">
-      <ul className="py-4 font-Montserrat text-xs font-semibold ">
-        {DROPARRAY.map((item, index) => (
-          <li
-            key={index}
-            onClick={() => handleDropClick(item.path)}
-            className="hover:bg-brand_yellow-500 hover:text-white py-2 w-full px-5 rounded-lg"
-          >
-            {item.title}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
+
 interface ProductProp {
   img: string[];
   name: string;
@@ -203,12 +178,12 @@ const ProductSection = ({ product }: SellerRowProduct) => {
           {product.add_title}
         </h1>
         <h1 className="text-xs font-Roboto font-medium whitespace-nowrap">
-          <span className="text-brand_grey-200">Category</span>{" "}
-          {product.category} <span className="text-brand_grey-200">and</span>{" "}
+          <span className="text-brand_grey-200">Category</span>{' '}
+          {product.category} <span className="text-brand_grey-200">and</span>{' '}
           {product.sub_category}
         </h1>
         <h1 className="text-xs font-Roboto ">
-          <span className="text-brand_grey-200">City</span>{" "}
+          <span className="text-brand_grey-200">City</span>{' '}
           {product.location.city}
         </h1>
       </div>

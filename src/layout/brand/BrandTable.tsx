@@ -1,20 +1,21 @@
-import api from "@/instance/api";
-import StatusSelect from "@/ui/form/CustomSelect/StatusSelect";
-import { EditIcon } from "@/ui/icons";
-import { TrashIcon } from "@/ui/icons/all-icons/TrashIcon";
-import { handleApiError } from "@/utils/hanldeApiError";
-import React, { useState } from "react";
-import { toast } from "react-toastify";
+import api from '@/instance/api';
+import StatusSelect from '@/ui/form/CustomSelect/StatusSelect';
+import { EditIcon } from '@/ui/icons';
+import { TrashIcon } from '@/ui/icons/all-icons/TrashIcon';
+import { handleApiError } from '@/utils/hanldeApiError';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
 import {
   BrandItemProps,
   BrandRowProp,
   BrandTableProp,
   OptionType,
-} from "@/utils/types";
-import { OPTIONS } from "@/mock/Options";
-import NotFound from "@/ui/components/notfound";
-import { useRouter } from "next/navigation";
-import { URLS } from "@/utils/URLS";
+} from '@/utils/types';
+import { OPTIONS } from '@/mock/Options';
+import NotFound from '@/ui/components/notfound';
+import { useRouter } from 'next/navigation';
+import { URLS } from '@/utils/URLS';
+import ModalCom from '../Modal';
 
 const BrandTable = ({ brands, del, page }: BrandTableProp) => {
   return (
@@ -61,15 +62,22 @@ export default BrandTable;
 const TableRow = ({ item, index, del, page }: BrandRowProp) => {
   const [loading, setloading] = useState(false);
   const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const closeModal = () => {
+    setShowModal(false);
+  };
   const [selectedStatus, setSelectedStatus] = useState<OptionType>(
     item.draft
-      ? { label: "Draft", value: "true" }
-      : { label: "Active", value: "false" }
+      ? { label: 'Draft', value: 'true' }
+      : { label: 'Active', value: 'false' }
   );
 
   const handleStatusChange = async (e: BrandItemProps, a: OptionType) => {
     setSelectedStatus(a);
-    const draftVal = a.value === "true";
+    const draftVal = a.value === 'true';
     const newdata = {
       draft: draftVal,
       name: e.name,
@@ -79,7 +87,7 @@ const TableRow = ({ item, index, del, page }: BrandRowProp) => {
       const { data } = await api.patch(`/brand/update/${item._id}`, newdata);
       if (data) {
         setloading(false);
-        toast.success("Status updated successfully");
+        toast.success('Status updated successfully');
       }
     } catch (error) {
       const err = handleApiError(error);
@@ -113,11 +121,16 @@ const TableRow = ({ item, index, del, page }: BrandRowProp) => {
         </td>
         <td className="py-3 h-full flex justify-center items-center gap-4">
           <div
-            onClick={() => del(item._id)}
+            onClick={openModal}
             className="bg-brand_red-300 cursor-pointer h-10 flex items-center justify-center w-10 rounded-full"
           >
             <TrashIcon />
           </div>
+          <ModalCom
+            handleClose={closeModal}
+            open={showModal}
+            handleDel={() => del(item._id)}
+          />
           <div
             onClick={() => router.push(`${URLS.ADD_BRAND}?id=${item._id}`)}
             className="bg-brand_yellow-500 cursor-pointer h-10 flex items-center justify-center w-10 rounded-full"

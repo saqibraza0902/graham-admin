@@ -1,18 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
-import api from "@/instance/api";
-import { OPTIONS } from "@/mock/Options";
-import ImageWithFallback from "@/ui/components/ImgComponent";
-import NotFound from "@/ui/components/notfound";
-import Button from "@/ui/form/Button";
-import StatusSelect from "@/ui/form/CustomSelect/StatusSelect";
-import { EditIcon } from "@/ui/icons";
-import { TrashIcon } from "@/ui/icons/all-icons/TrashIcon";
-import { URLS } from "@/utils/URLS";
-import { handleApiError } from "@/utils/hanldeApiError";
-import { CategoryItemProps, CategoryRowProp, OptionType } from "@/utils/types";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import api from '@/instance/api';
+import { OPTIONS } from '@/mock/Options';
+import ImageWithFallback from '@/ui/components/ImgComponent';
+import NotFound from '@/ui/components/notfound';
+import Button from '@/ui/form/Button';
+import StatusSelect from '@/ui/form/CustomSelect/StatusSelect';
+import { EditIcon } from '@/ui/icons';
+import { TrashIcon } from '@/ui/icons/all-icons/TrashIcon';
+import { URLS } from '@/utils/URLS';
+import { handleApiError } from '@/utils/hanldeApiError';
+import { CategoryItemProps, CategoryRowProp, OptionType } from '@/utils/types';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import ModalCom from '../Modal';
 interface Prop {
   categories: CategoryItemProps[];
   page?: number;
@@ -71,15 +72,22 @@ export default CategoryTable;
 const TableRow = ({ item, del, index, page }: CategoryRowProp) => {
   const router = useRouter();
   const [loading, setloading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const closeModal = () => {
+    setShowModal(false);
+  };
   const [selectedStatus, setSelectedStatus] = useState<OptionType>(
     item.draft
-      ? { label: "Draft", value: "true" }
-      : { label: "Active", value: "false" }
+      ? { label: 'Draft', value: 'true' }
+      : { label: 'Active', value: 'false' }
   );
 
   const handleStatusChange = async (e: CategoryItemProps, a: OptionType) => {
     setSelectedStatus(a);
-    const draftVal = a.value === "true";
+    const draftVal = a.value === 'true';
     const newdata = {
       draft: draftVal,
       name: e.name,
@@ -90,7 +98,7 @@ const TableRow = ({ item, del, index, page }: CategoryRowProp) => {
       const { data } = await api.patch(`/category/${item._id}`, newdata);
       if (data) {
         setloading(false);
-        toast.success("Status updated successfully");
+        toast.success('Status updated successfully');
       }
     } catch (error) {
       const err = handleApiError(error);
@@ -104,7 +112,7 @@ const TableRow = ({ item, del, index, page }: CategoryRowProp) => {
       <tr className="h-6" />
       <tr className="bg-white text-center text-brand_black-500 font-Montserrat whitespace-nowrap text-sm font-semibold">
         <td className="px-4 py-3 rounded-l-lg">
-          {" "}
+          {' '}
           {page && index + 1 + (page - 1) * 5}
         </td>
         <td className="px-4 py-3 flex justify-center">
@@ -144,11 +152,16 @@ const TableRow = ({ item, del, index, page }: CategoryRowProp) => {
         </td>
         <td className="py-3 h-full flex justify-center items-center gap-4">
           <div
-            onClick={() => del(item._id)}
+            onClick={openModal}
             className="bg-brand_red-300 cursor-pointer h-10 flex items-center justify-center w-10 rounded-full"
           >
             <TrashIcon />
           </div>
+          <ModalCom
+            handleClose={closeModal}
+            open={showModal}
+            handleDel={() => del(item._id)}
+          />
           <div
             onClick={() => router.push(`${URLS.ADD_CATEGORY}?id=${item._id}`)}
             className="bg-brand_yellow-500 cursor-pointer h-10 flex items-center justify-center w-10 rounded-full"

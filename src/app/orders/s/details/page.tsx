@@ -1,16 +1,18 @@
-"use client";
-import api from "@/instance/api";
-import CommonLayout from "@/layout/CommonLayout";
-import SellerLayout from "@/layout/seller/SellerLayout";
-import { useAppSelector } from "@/redux/hooks";
-import Loader from "@/ui/components/loader";
-import { handleApiError } from "@/utils/hanldeApiError";
-import { AdCreatedBy } from "@/utils/types";
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+'use client';
+import api from '@/instance/api';
+import CommonLayout from '@/layout/CommonLayout';
+import SellerLayout from '@/layout/seller/SellerLayout';
+import { useAppSelector } from '@/redux/hooks';
+import Loader from '@/ui/components/loader';
+import { handleApiError } from '@/utils/hanldeApiError';
+import { AdCreatedBy } from '@/utils/types';
+import { useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const Orders = () => {
-  const id = useAppSelector((state) => state.id);
+  const params = useSearchParams();
+  const id = params.get('id');
   const [profile, setProfile] = useState<AdCreatedBy | undefined>();
   const [loading, setloading] = useState(true);
   useEffect(() => {

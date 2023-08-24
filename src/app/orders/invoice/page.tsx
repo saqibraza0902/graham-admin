@@ -1,18 +1,18 @@
-"use client";
-import api from "@/instance/api";
-import CommonLayout from "@/layout/CommonLayout";
-import OrdersLayout from "@/layout/orders/OrdersLayout";
-import Invoice from "@/layout/orders/invoices/Invoice";
-import Loader from "@/ui/components/loader";
-import { handleApiError } from "@/utils/hanldeApiError";
-import { Order } from "@/utils/orderTypes";
-import { useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+'use client';
+import api from '@/instance/api';
+import CommonLayout from '@/layout/CommonLayout';
+import OrdersLayout from '@/layout/orders/OrdersLayout';
+import Invoice from '@/layout/orders/invoices/Invoice';
+import Loader from '@/ui/components/loader';
+import { handleApiError } from '@/utils/hanldeApiError';
+import { Order } from '@/utils/orderTypes';
+import { useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const Orders = () => {
   const param = useSearchParams();
-  const id = param.get("id");
+  const id = param.get('id');
   const [invoice, setInvoice] = useState<Order>();
   const [loading, setloading] = useState(true);
   useEffect(() => {

@@ -1,23 +1,39 @@
-import { useAppDispatch } from "@/redux/hooks";
-import { buyerId } from "@/redux/slices/buyerslice";
-import ImageWithFallback from "@/ui/components/ImgComponent";
-import FormattedDate from "@/ui/components/formatteddate";
-import NotFound from "@/ui/components/notfound";
-import Button from "@/ui/form/Button";
-import { MoreIcon, Verified } from "@/ui/icons";
-import { URLS } from "@/utils/URLS";
-import { IProduct } from "@/utils/orderTypes";
-import { cn } from "@/utils/styles";
+import { useAppDispatch } from '@/redux/hooks';
+import { buyerId } from '@/redux/slices/buyerslice';
+import ImageWithFallback from '@/ui/components/ImgComponent';
+import FormattedDate from '@/ui/components/formatteddate';
+import NotFound from '@/ui/components/notfound';
+import Button from '@/ui/form/Button';
+import { MoreIcon, Verified } from '@/ui/icons';
+import { URLS } from '@/utils/URLS';
+import { IProduct } from '@/utils/orderTypes';
+import { cn } from '@/utils/styles';
 import {
   IBuyer,
   SellerRowProduct,
   SellerRowProps,
   SellerTableProps,
   SellerTableSellerSection,
-} from "@/utils/types";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+} from '@/utils/types';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import Menu from '../Menu';
+
+const DROPARRAY = [
+  {
+    title: 'View Profile',
+    path: URLS.BUYER_PROFILE,
+  },
+  {
+    title: 'View Bookings',
+    path: URLS.BUYER_BOOKING,
+  },
+  {
+    title: 'View Invoices',
+    path: URLS.BUYER_INVOICE,
+  },
+];
 interface BuyerTableProps {
   data: IBuyer[];
   page?: number;
@@ -100,13 +116,13 @@ const TableRow = ({ open, handleClick, index = 0, item, page }: Props) => {
           />
         </td>
         <td className="px-4 py-3 text-center">
-          {item.phoneNumber ? item.phoneNumber : "---"}
+          {item.phoneNumber ? item.phoneNumber : '---'}
         </td>
         <td className="px-4 py-3">
           <FormattedDate date={item.createdAt} />
         </td>
         <td className="px-4 pt-10  h-full flex justify-center items-center">
-          <Verified color={item.varified ? "#0062FF" : "D0E7DC"} />
+          <Verified color={item.varified ? '#0062FF' : 'D0E7DC'} />
         </td>
         <td
           onClick={handleClick}
@@ -116,8 +132,12 @@ const TableRow = ({ open, handleClick, index = 0, item, page }: Props) => {
             <MoreIcon />
           </div>
           {open && (
-            <div className="absolute top-11 right-7">
-              <Dropdown id={item._id} />
+            <div className="absolute -top-4 right-7">
+              <Menu
+                onClose={handleClick}
+                DropArray={DROPARRAY}
+                buyer_id={item._id}
+              />
             </div>
           )}
         </td>
@@ -148,46 +168,32 @@ const BuyerSection = ({ email, name, profile }: SellerTableSellerSection) => {
   );
 };
 
-const DROPARRAY = [
-  {
-    title: "View Profile",
-    path: URLS.BUYER_PROFILE,
-  },
-  {
-    title: "View Bookings",
-    path: URLS.BUYER_BOOKING,
-  },
-  {
-    title: "View Invoices",
-    path: URLS.BUYER_INVOICE,
-  },
-];
-interface DropProps {
-  id: string;
-}
-const Dropdown = ({ id }: DropProps) => {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
-  const handleDropClick = (path: string) => {
-    dispatch(buyerId(id));
-    router.push(path);
-  };
-  return (
-    <div className="bg-white shadow-2xl rounded-xl relative !z-10">
-      <ul className="py-4 font-Montserrat text-xs font-semibold ">
-        {DROPARRAY.map((item, index) => (
-          <li
-            key={index}
-            onClick={() => handleDropClick(item.path)}
-            className="hover:bg-brand_yellow-500 hover:text-white py-2 w-full px-5 rounded-lg"
-          >
-            {item.title}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
+// interface DropProps {
+//   id: string;
+// }
+// const Dropdown = ({ id }: DropProps) => {
+//   const router = useRouter();
+//   const dispatch = useAppDispatch();
+//   const handleDropClick = (path: string) => {
+//     dispatch(buyerId(id));
+//     router.push(path);
+//   };
+//   return (
+//     <div className="bg-white shadow-2xl rounded-xl relative !z-10">
+//       <ul className="py-4 font-Montserrat text-xs font-semibold ">
+//         {DROPARRAY.map((item, index) => (
+//           <li
+//             key={index}
+//             onClick={() => handleDropClick(item.path)}
+//             className="hover:bg-brand_yellow-500 hover:text-white py-2 w-full px-5 rounded-lg"
+//           >
+//             {item.title}
+//           </li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// };
 interface ProductProps {
   product: IProduct;
 }
@@ -207,13 +213,13 @@ const ProductSection = ({ product }: ProductProps) => {
           {product && product.add_title}
         </h1>
         <h1 className="text-xs font-Roboto font-medium whitespace-nowrap">
-          <span className="text-brand_grey-200">Category</span>{" "}
+          <span className="text-brand_grey-200">Category</span>{' '}
           {product && product.category}
-          <span className="text-brand_grey-200">and</span>{" "}
+          <span className="text-brand_grey-200">and</span>{' '}
           {product && product.sub_category}
         </h1>
         <h1 className="text-xs font-Roboto ">
-          <span className="text-brand_grey-200">City</span>{" "}
+          <span className="text-brand_grey-200">City</span>{' '}
           {product.location && product.location.city}
         </h1>
       </div>

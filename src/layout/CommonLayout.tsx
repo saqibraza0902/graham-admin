@@ -1,9 +1,9 @@
-import Sidebar from "@/templates/Sidebar";
-import React, { useState } from "react";
-import { cn } from "@/utils/styles";
-import TopComponent from "@/templates/TopComponent";
-import ToggleSidebar from "@/templates/ToggleSidebar";
-import withAuth from "@/hooks/withAuth";
+import Sidebar from '@/templates/Sidebar';
+import React, { useState } from 'react';
+import { cn } from '@/utils/styles';
+import TopComponent from '@/templates/TopComponent';
+import ToggleSidebar from '@/templates/ToggleSidebar';
+import withAuth from '@/hooks/withAuth';
 interface Props {
   children: React.ReactNode;
   className?: string;
@@ -14,7 +14,7 @@ const CommonLayout = ({ children, className }: Props) => {
     setisOpen((prev) => !prev);
   };
   return (
-    <div className={cn("bg-brand_white-500 flex h-full w-full", className)}>
+    <div className={cn('bg-brand_white-500 flex h-full w-full', className)}>
       <div className="pl-5 pt-3 w-max hidden md:flex">
         <Sidebar />
       </div>

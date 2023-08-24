@@ -1,21 +1,22 @@
-import api from "@/instance/api";
-import { OPTIONS } from "@/mock/Options";
-import { DURATION, PLANS } from "@/mock/SubsOptions";
-import NotFound from "@/ui/components/notfound";
-import StatusSelect from "@/ui/form/CustomSelect/StatusSelect";
-import { EditIcon } from "@/ui/icons";
-import { TrashIcon } from "@/ui/icons/all-icons/TrashIcon";
-import { URLS } from "@/utils/URLS";
-import { handleApiError } from "@/utils/hanldeApiError";
+import api from '@/instance/api';
+import { OPTIONS } from '@/mock/Options';
+import { DURATION, PLANS } from '@/mock/SubsOptions';
+import NotFound from '@/ui/components/notfound';
+import StatusSelect from '@/ui/form/CustomSelect/StatusSelect';
+import { EditIcon } from '@/ui/icons';
+import { TrashIcon } from '@/ui/icons/all-icons/TrashIcon';
+import { URLS } from '@/utils/URLS';
+import { handleApiError } from '@/utils/hanldeApiError';
 import {
   OptionType,
   SubsItemProps,
   SubsRowProps,
   SubsTableProp,
-} from "@/utils/types";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { toast } from "react-toastify";
+} from '@/utils/types';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import Modal from '../Modal';
 
 const SubsTable = ({ subs, page, del }: SubsTableProp) => {
   return (
@@ -64,15 +65,22 @@ export default SubsTable;
 const TableRow = ({ item, index, del, page }: SubsRowProps) => {
   const [loading, setloading] = useState(false);
   const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const closeModal = () => {
+    setShowModal(false);
+  };
   const [selectedStatus, setSelectedStatus] = useState<OptionType>(
     item.draft
-      ? { label: "Draft", value: "true" }
-      : { label: "Active", value: "false" }
+      ? { label: 'Draft', value: 'true' }
+      : { label: 'Active', value: 'false' }
   );
 
   const handleStatusChange = async (e: SubsItemProps, a: OptionType) => {
     setSelectedStatus(a);
-    const draftVal = a.value === "true";
+    const draftVal = a.value === 'true';
     const newdata = {
       draft: draftVal,
       duration_in_days: e.duration_in_days,
@@ -87,7 +95,7 @@ const TableRow = ({ item, index, del, page }: SubsRowProps) => {
       );
       if (data) {
         setloading(false);
-        toast.success("Status updated successfully");
+        toast.success('Status updated successfully');
       }
     } catch (error) {
       const err = handleApiError(error);
@@ -135,11 +143,17 @@ const TableRow = ({ item, index, del, page }: SubsRowProps) => {
         </td>
         <td className="py-3 h-full flex justify-center items-center gap-4">
           <div
-            onClick={() => del(item._id)}
+            onClick={openModal}
             className="bg-brand_red-300 cursor-pointer h-10 flex items-center justify-center w-10 rounded-full"
           >
             <TrashIcon />
           </div>
+          <Modal
+            handleClose={closeModal}
+            open={showModal}
+            handleDel={() => del(item._id)}
+          />
+
           <div
             onClick={() =>
               router.push(`${URLS.ADD_SUBSCRIPTION}?id=${item._id}`)

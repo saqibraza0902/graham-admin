@@ -1,20 +1,21 @@
-import api from "@/instance/api";
-import { OPTIONS } from "@/mock/Options";
-import NotFound from "@/ui/components/notfound";
-import StatusSelect from "@/ui/form/CustomSelect/StatusSelect";
-import { EditIcon } from "@/ui/icons";
-import { TrashIcon } from "@/ui/icons/all-icons/TrashIcon";
-import { URLS } from "@/utils/URLS";
-import { handleApiError } from "@/utils/hanldeApiError";
+import api from '@/instance/api';
+import { OPTIONS } from '@/mock/Options';
+import NotFound from '@/ui/components/notfound';
+import StatusSelect from '@/ui/form/CustomSelect/StatusSelect';
+import { EditIcon } from '@/ui/icons';
+import { TrashIcon } from '@/ui/icons/all-icons/TrashIcon';
+import { URLS } from '@/utils/URLS';
+import { handleApiError } from '@/utils/hanldeApiError';
 import {
   OptionType,
   TaxesItemProps,
   TaxesRowProp,
   TaxesTableProp,
-} from "@/utils/types";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { toast } from "react-toastify";
+} from '@/utils/types';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import Modal from '../Modal';
 
 const TaxesTable = ({ getTax, page, del }: TaxesTableProp) => {
   return (
@@ -64,13 +65,13 @@ const TableRow = ({ item, index, del, page }: TaxesRowProp) => {
   const router = useRouter();
   const [selectedStatus, setSelectedStatus] = useState<OptionType>(
     item.draft
-      ? { label: "Draft", value: "true" }
-      : { label: "Active", value: "false" }
+      ? { label: 'Draft', value: 'true' }
+      : { label: 'Active', value: 'false' }
   );
 
   const handleStatusChange = async (e: TaxesItemProps, a: OptionType) => {
     setSelectedStatus(a);
-    const draftVal = a.value === "true";
+    const draftVal = a.value === 'true';
     const newdata = {
       draft: draftVal,
       percentage: e.percentage,
@@ -81,7 +82,7 @@ const TableRow = ({ item, index, del, page }: TaxesRowProp) => {
       const { data } = await api.patch(`/tax/update/${item._id}`, newdata);
       if (data) {
         setloading(false);
-        toast.success("Status updated successfully");
+        toast.success('Status updated successfully');
       }
     } catch (error) {
       const err = handleApiError(error);
@@ -90,10 +91,18 @@ const TableRow = ({ item, index, del, page }: TaxesRowProp) => {
       setloading(false);
     }
   };
+  const [showModal, setShowModal] = useState(false);
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <>
       <tr className="h-6" />
-      <tr className="bg-white text-center text-brand_black-500 font-Montserrat whitespace-nowrap text-sm font-semibold">
+      <tr className="bg-white min-h-screen  text-center text-brand_black-500 font-Montserrat whitespace-nowrap text-sm font-semibold">
         <td className="px-4 py-3 rounded-l-lg">
           {page && index + 1 + (page - 1) * 5}
         </td>
@@ -116,11 +125,17 @@ const TableRow = ({ item, index, del, page }: TaxesRowProp) => {
         </td>
         <td className="py-3 h-full flex justify-center items-center gap-4">
           <div
-            onClick={() => del(item._id)}
+            onClick={openModal}
             className="bg-brand_red-300 cursor-pointer h-10 flex items-center justify-center w-10 rounded-full"
           >
             <TrashIcon />
           </div>
+          <Modal
+            handleClose={closeModal}
+            open={showModal}
+            handleDel={() => del(item._id)}
+          />
+
           <div
             onClick={() => router.push(`${URLS.ADD_FEE}?id=${item._id}`)}
             className="bg-brand_yellow-500 cursor-pointer h-10 flex items-center justify-center w-10 rounded-full"

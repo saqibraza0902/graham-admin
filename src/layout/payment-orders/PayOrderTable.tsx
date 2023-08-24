@@ -1,16 +1,17 @@
-import { useAppDispatch } from "@/redux/hooks";
-import { buyerId } from "@/redux/slices/buyerslice";
-import { setSellerID } from "@/redux/slices/sellerslice";
-import ImageWithFallback from "@/ui/components/ImgComponent";
-import FormattedDate from "@/ui/components/formatteddate";
-import NotFound from "@/ui/components/notfound";
-import { MoreIcon } from "@/ui/icons";
-import { URLS } from "@/utils/URLS";
-import { formatCurrency } from "@/utils/currencyFormat";
-import IdComponent from "@/utils/formatId";
-import { IProduct, Order } from "@/utils/orderTypes";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useAppDispatch } from '@/redux/hooks';
+import { buyerId } from '@/redux/slices/buyerslice';
+import { setSellerID } from '@/redux/slices/sellerslice';
+import ImageWithFallback from '@/ui/components/ImgComponent';
+import FormattedDate from '@/ui/components/formatteddate';
+import NotFound from '@/ui/components/notfound';
+import { MoreIcon } from '@/ui/icons';
+import { URLS } from '@/utils/URLS';
+import { formatCurrency } from '@/utils/currencyFormat';
+import IdComponent from '@/utils/formatId';
+import { IProduct, Order } from '@/utils/orderTypes';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import Menu from '../Menu';
 interface TableProps {
   orders: Order[];
 }
@@ -103,8 +104,27 @@ const TableRow = ({ item, handleClick, open }: Props) => {
             <MoreIcon />
           </div>
           {open && (
-            <div className="absolute top-11 right-7">
-              <Dropdown item={item} />
+            <div className="absolute -top-8 right-7">
+              <Menu
+                onClose={handleClick}
+                DropArray={[
+                  {
+                    title: 'View Buyer Profile',
+                    path: `${URLS.PAYMENT_BUYER}?id=${item.buyer._id}`,
+                  },
+                  {
+                    title: 'View Owner Profile',
+                    path: `${URLS.PAYMENT_SELLER}?id=${item.seller._id}`,
+                  },
+                  {
+                    title: 'Product Page',
+                  },
+                  {
+                    title: 'View Invoice',
+                    path: `${URLS.PAYMENT_INVOICE}?id=${item._id}`,
+                  },
+                ]}
+              />
             </div>
           )}
         </td>
@@ -115,18 +135,18 @@ const TableRow = ({ item, handleClick, open }: Props) => {
 
 const DROPARRAY = [
   {
-    title: "View Buyer Profile",
+    title: 'View Buyer Profile',
     path: URLS.PAYMENT_BUYER,
   },
   {
-    title: "View Owner Profile",
+    title: 'View Owner Profile',
     path: URLS.PAYMENT_SELLER,
   },
   {
-    title: "Product Page",
+    title: 'Product Page',
   },
   {
-    title: "View Invoice",
+    title: 'View Invoice',
     path: URLS.PAYMENT_INVOICE,
   },
 ];
@@ -185,13 +205,13 @@ const ProductSection = ({ product, city }: ProductProps) => {
           {product.add_title}
         </h1>
         <h1 className="text-xs font-Roboto font-medium whitespace-nowrap">
-          <span className="text-brand_grey-200">Category</span>{" "}
-          {product.category} <span className="text-brand_grey-200">and</span>{" "}
+          <span className="text-brand_grey-200">Category</span>{' '}
+          {product.category} <span className="text-brand_grey-200">and</span>{' '}
           {product.sub_category}
         </h1>
         <h1 className="text-xs font-Roboto ">
-          <span className="text-brand_grey-200">City</span>{" "}
-          {city ? city : "---"}
+          <span className="text-brand_grey-200">City</span>{' '}
+          {city ? city : '---'}
         </h1>
       </div>
     </div>

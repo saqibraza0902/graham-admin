@@ -1,8 +1,8 @@
-import { limit } from "@/instance/limit";
-import Pagination from "@/ui/components/pagination";
-import Button from "@/ui/form/Button";
-import { useRouter, useSearchParams } from "next/navigation";
-import React from "react";
+import { limit } from '@/instance/limit';
+import Pagination from '@/ui/components/pagination';
+import Button from '@/ui/form/Button';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React from 'react';
 
 interface Props {
   children: React.ReactNode;
@@ -10,12 +10,12 @@ interface Props {
 }
 const SellerHomeLayout = ({ len = 0, children }: Props) => {
   const params = useSearchParams();
-  const page = params.get("page") || 1;
+  const page = params.get('page') || 1;
   const router = useRouter();
   const totalPages: number | undefined = len && Math.ceil(len / limit);
   const handlePageChange = (page: number) => {
     const searchParams = new URLSearchParams(window.location.search);
-    searchParams.set("page", String(page));
+    searchParams.set('page', String(page));
     router.push(`?${searchParams.toString()}`);
   };
   return (

@@ -1,15 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
-import { PLANS } from "@/mock/SubsOptions";
-import ImageWithFallback from "@/ui/components/ImgComponent";
-import FormattedDate from "@/ui/components/formatteddate";
-import NotFound from "@/ui/components/notfound";
-import { MoreIcon, Verified } from "@/ui/icons";
-import { URLS } from "@/utils/URLS";
-import IdComponent from "@/utils/formatId";
-import { PostAdRowProps, PostAdTable } from "@/utils/types";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { PLANS } from '@/mock/SubsOptions';
+import ImageWithFallback from '@/ui/components/ImgComponent';
+import FormattedDate from '@/ui/components/formatteddate';
+import NotFound from '@/ui/components/notfound';
+import { MoreIcon, Verified } from '@/ui/icons';
+import { URLS } from '@/utils/URLS';
+import IdComponent from '@/utils/formatId';
+import { PostAdRowProps, PostAdTable } from '@/utils/types';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
+import Menu from '../Menu';
 
+const DROPARRAY = [
+  {
+    title: 'View Owner Profile',
+    path: URLS.POST_ADS_USER_PROFILE,
+  },
+  {
+    title: 'Product Page',
+  },
+];
 const PostAdTable = ({ data, page }: PostAdTable) => {
   const [openRowIndex, setOpenRowIndex] = useState<number | null>(null);
 
@@ -27,7 +37,7 @@ const PostAdTable = ({ data, page }: PostAdTable) => {
         <table
           className="w-full"
           style={{
-            borderStyle: "hidden",
+            borderStyle: 'hidden',
           }}
         >
           <thead>
@@ -99,7 +109,7 @@ const TableRow = ({
           />
         </td>
         <td className="px-4 py-3 text-center">
-          €{item.prices.rent_price} /{" "}
+          €{item.prices.rent_price} /{' '}
           <span className="!capitalize">{item.prices.rented_as}</span>
         </td>
         <td className="px-4 py-3 text-center">
@@ -121,48 +131,17 @@ const TableRow = ({
             <MoreIcon />
           </div>
           {open && (
-            <div className="absolute top-11 right-7">
-              <Dropdown id={item.created_by?._id} />
+            <div className="absolute top-4 right-7">
+              <Menu
+                onClose={handleClick}
+                seller_id={item.created_by?._id}
+                DropArray={DROPARRAY}
+              />
             </div>
           )}
         </td>
       </tr>
     </>
-  );
-};
-
-const DROPARRAY = [
-  {
-    title: "View Owner Profile",
-    path: URLS.POST_ADS_USER_PROFILE,
-  },
-  {
-    title: "Product Page",
-  },
-];
-interface DropProps {
-  id: string;
-}
-const Dropdown = ({ id }: DropProps) => {
-  const router = useRouter();
-  return (
-    <div className="bg-white shadow-2xl rounded-xl relative !z-10">
-      <ul className="py-4 font-Montserrat text-xs font-semibold ">
-        {DROPARRAY.map((item, index) => (
-          <li
-            key={index}
-            onClick={() => {
-              if (item.path) {
-                router.push(`${item.path}?id=${id}`);
-              }
-            }}
-            className="hover:bg-brand_yellow-500 hover:text-white py-2 w-full px-5 rounded-lg"
-          >
-            {item.title}
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 };
 interface ProductProp {
@@ -194,7 +173,7 @@ const ProductSection = ({
           {name}
         </h1>
         <h1 className="text-xs font-Roboto font-medium whitespace-nowrap">
-          <span className="text-brand_grey-200">Category</span> {category}{" "}
+          <span className="text-brand_grey-200">Category</span> {category}{' '}
           <span className="text-brand_grey-200">and</span> {sub_category}
         </h1>
         <h1 className="text-xs font-Roboto ">
