@@ -8,7 +8,7 @@ const Button = ({ children, className, ...props }: ButtonProps) => {
     <button
       {...props}
       className={cn(
-        "h-12 w-full rounded-xl text-center p-4 border border-black text-xs font-Poppins text-white bg-black",
+        "disabled:bg-opacity-50 h-12 w-full rounded-xl text-center p-4 border border-black text-xs font-Poppins text-white bg-black",
         className
       )}
     >

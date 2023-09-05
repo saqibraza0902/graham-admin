@@ -1,24 +1,24 @@
 /* eslint-disable @next/next/no-img-element */
-import Button from "@/ui/form/Button";
-import CustomSelect from "@/ui/form/CustomSelect";
-import Input from "@/ui/form/Input";
-import { RadioChecked, RadioUnchecked } from "@/ui/icons";
-import { cn } from "@/utils/styles";
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { fileIntoBase64 } from "@/utils/fileIntoBase64";
-import { handleApiError } from "@/utils/hanldeApiError";
-import api from "@/instance/api";
+import Button from '@/ui/form/Button';
+import CustomSelect from '@/ui/form/CustomSelect';
+import Input from '@/ui/form/Input';
+import { RadioChecked, RadioUnchecked } from '@/ui/icons';
+import { cn } from '@/utils/styles';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import { fileIntoBase64 } from '@/utils/fileIntoBase64';
+import { handleApiError } from '@/utils/hanldeApiError';
+import api from '@/instance/api';
 import {
   CategoryDataState,
   CategoryRadioButtonProps,
   SubCategoryDataState,
   OptionType,
   SubCategoryOpts,
-} from "@/utils/types";
-import { OPTIONS } from "@/mock/Options";
-import { useRouter, useSearchParams } from "next/navigation";
-import { URLS } from "@/utils/URLS";
+} from '@/utils/types';
+import { OPTIONS } from '@/mock/Options';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { URLS } from '@/utils/URLS';
 interface Props {
   parent: null | boolean;
   sub: null | boolean;
@@ -32,7 +32,7 @@ const AddCatLayout = () => {
   const [disabled, setDisabled] = useState(initialState);
   const [data, setData] = useState();
   const param = useSearchParams();
-  const id = param.get("id");
+  const id = param.get('id');
   useEffect(() => {
     const getCategory = async () => {
       try {
@@ -102,29 +102,30 @@ interface SubCategoryProps {
 const SubCategory = ({ data, id }: SubCategoryProps) => {
   const initialState = {
     draft: true,
-    name: "",
-    parent_category: "",
+    name: '',
+    parent_category: '',
   };
   const OptsInitial = {
     status: {
-      label: "Draft",
-      value: "true",
+      label: 'Draft',
+      value: 'true',
     },
     parent: {
-      label: "",
-      value: "",
+      label: '',
+      value: '',
     },
   };
   const [catsArray, setCatsArray] = useState([]);
+  const [selectedParent, setSelectedParent] = useState<any>(null);
   const [opts, setOpts] = useState<SubCategoryOpts>(OptsInitial);
   const [loading, setloading] = useState(false);
-
+  const router = useRouter();
   const [stateValues, setStateValues] =
     useState<SubCategoryDataState>(initialState);
   useEffect(() => {
     const getCats = async () => {
       try {
-        const { data } = await api.get("/category/parent/categories");
+        const { data } = await api.get('/category/parent/categories');
         setCatsArray(data);
       } catch (error) {
         const err = handleApiError(error);
@@ -141,29 +142,29 @@ const SubCategory = ({ data, id }: SubCategoryProps) => {
       setOpts({
         parent: { label: data.parent_category, value: data.parent_category },
         status: {
-          label: data.draft ? "Draft" : "Active",
+          label: data.draft ? 'Draft' : 'Active',
           value: data.draft.toString(),
         },
       });
     }
-  }, [data]);
+  }, [data, selectedParent]);
   const transformedArray = catsArray.map((item: SubCategoryParentProps) => ({
     label: item.name,
     value: item._id,
   }));
-  const selectedParent = transformedArray.find(
-    (item) => item.value === stateValues.parent_category
-  );
+
   const handleAddSubCategory = async () => {
     if (stateValues.name && stateValues.parent_category) {
       try {
         setloading(true);
-        const { data } = await api.post("/category/create", stateValues);
+        const { data } = await api.post('/category/create', stateValues);
         if (data) {
           setloading(false);
           setStateValues(initialState);
           setOpts(OptsInitial);
-          toast.success("Category added Successfully");
+          setSelectedParent(null);
+          toast.success('Category added Successfully');
+          console.log(selectedParent);
         }
       } catch (error) {
         const err = handleApiError(error);
@@ -172,15 +173,21 @@ const SubCategory = ({ data, id }: SubCategoryProps) => {
         setloading(false);
       }
     } else {
-      toast.error("Please fill the fields");
+      toast.error('Please fill the fields');
     }
   };
   const handleOnChange = (e: OptionType) => {
-    const draftVal = e.value === "true";
+    const draftVal = e.value === 'true';
     setStateValues({ ...stateValues, draft: draftVal });
     setOpts({ ...opts, status: e });
   };
+  const selectedparent = transformedArray.find(
+    (item) => item.value === stateValues.parent_category
+  );
   const handleCategoryChange = (e: OptionType) => {
+    setSelectedParent(
+      transformedArray.find((item) => item.value === String(e.value))
+    );
     setStateValues({ ...stateValues, parent_category: String(e.value) });
     setOpts({ ...opts, parent: e });
   };
@@ -193,7 +200,8 @@ const SubCategory = ({ data, id }: SubCategoryProps) => {
           setloading(false);
           setStateValues(initialState);
           setOpts(OptsInitial);
-          toast.success("Category updated Successfully");
+          router.back();
+          toast.success('Category updated Successfully');
         }
       } catch (error) {
         const err = handleApiError(error);
@@ -202,7 +210,7 @@ const SubCategory = ({ data, id }: SubCategoryProps) => {
         setloading(false);
       }
     } else {
-      toast.error("Please fill the fields");
+      toast.error('Please fill the fields');
     }
   };
   return (
@@ -215,7 +223,7 @@ const SubCategory = ({ data, id }: SubCategoryProps) => {
           <CustomSelect
             className="w-full xl:w-60 "
             options={transformedArray}
-            value={selectedParent}
+            value={id ? selectedparent : selectedParent}
             onChange={(e: OptionType) => handleCategoryChange(e)}
             placeholder="Select Category"
           />
@@ -247,7 +255,7 @@ const SubCategory = ({ data, id }: SubCategoryProps) => {
                 ? OPTIONS.find(
                     (el) => el.value === stateValues.draft.toString()
                   )
-                : { label: "Draft", value: "true" }
+                : { label: 'Draft', value: 'true' }
             }
             onChange={(e: OptionType) => handleOnChange(e)}
             placeholder="Status"
@@ -266,7 +274,7 @@ const SubCategory = ({ data, id }: SubCategoryProps) => {
           }}
           className="bg-brand_yellow-500 border-none w-full h-10 py-0 lg:w-4/12 "
         >
-          {id ? "Update" : "Save"}
+          {id ? 'Update' : 'Save'}
         </Button>
       </div>
     </>
@@ -277,7 +285,7 @@ const Category = ({ data, id }: any) => {
   const [val, setVal] = useState<any>({});
   const [loading, setloading] = useState(false);
   const router = useRouter();
-  const initialState = { draft: true, name: "", icon: null };
+  const initialState = { draft: true, name: '', icon: null };
   const [stateValues, setStateValues] =
     useState<CategoryDataState>(initialState);
 
@@ -293,19 +301,19 @@ const Category = ({ data, id }: any) => {
     setVal(data);
   };
   const handleOnChange = (e: OptionType) => {
-    const draftVal = e.value === "true";
+    const draftVal = e.value === 'true';
     setStateValues({ ...stateValues, draft: draftVal });
   };
   const AddCategory = async () => {
     if ((stateValues.name, stateValues.icon)) {
       try {
         setloading(true);
-        const { data } = await api.post("/category/create", stateValues);
+        const { data } = await api.post('/category/create', stateValues);
         if (data) {
           setloading(false);
           setStateValues(initialState);
           setVal({});
-          toast.success("Category added Successfully");
+          toast.success('Category added Successfully');
         }
       } catch (error) {
         const err = handleApiError(error);
@@ -314,7 +322,7 @@ const Category = ({ data, id }: any) => {
         setloading(false);
       }
     } else {
-      toast.error("Please fill the fields");
+      toast.error('Please fill the fields');
     }
   };
   const UpdateCategory = async () => {
@@ -325,8 +333,8 @@ const Category = ({ data, id }: any) => {
         if (data) {
           setloading(false);
           setStateValues(initialState);
-          router.push(URLS.CATEGORIES);
-          toast.success("Category updated Successfully");
+          router.back();
+          toast.success('Category updated Successfully');
         }
       } catch (error) {
         const err = handleApiError(error);
@@ -335,7 +343,7 @@ const Category = ({ data, id }: any) => {
         setloading(false);
       }
     } else {
-      toast.error("Please fill the fields");
+      toast.error('Please fill the fields');
     }
   };
   return (
@@ -365,7 +373,7 @@ const Category = ({ data, id }: any) => {
                 ? OPTIONS.find(
                     (el) => el.value === stateValues.draft.toString()
                   )
-                : { label: "Draft", value: "true" }
+                : { label: 'Draft', value: 'true' }
             }
             onChange={(e: OptionType) => handleOnChange(e)}
             placeholder="Status"
@@ -389,7 +397,7 @@ const Category = ({ data, id }: any) => {
                 }
                 const file = e.target.files[0];
                 handleImageChange(file);
-                e.target.value = "";
+                e.target.value = '';
               }}
               type="file"
               id="actual-btn"
@@ -420,7 +428,7 @@ const Category = ({ data, id }: any) => {
           }}
           className="bg-brand_yellow-500 border-none py-0 h-10 w-full lg:w-1/3 "
         >
-          {data ? "Update" : "Save"}
+          {data ? 'Update' : 'Save'}
         </Button>
       </div>
     </>
@@ -441,10 +449,10 @@ const RadioButton = ({
         }
       }}
       className={cn(
-        "w-full lg:w-52 px-3 py-2 rounded-xl flex items-center gap-x-3 cursor-pointer border",
+        'w-full lg:w-52 px-3 py-2 rounded-xl flex items-center gap-x-3 cursor-pointer border',
         {
-          "bg-brand_green-500": checked,
-          "bg-white": !checked,
+          'bg-brand_green-500': checked,
+          'bg-white': !checked,
         }
       )}
     >
@@ -454,8 +462,8 @@ const RadioButton = ({
         <RadioUnchecked className="fill-white" />
       )}
       <h1
-        className={cn("font-Roboto text-sm text-black", {
-          "text-white": checked,
+        className={cn('font-Roboto text-sm text-black', {
+          'text-white': checked,
         })}
       >
         {title}

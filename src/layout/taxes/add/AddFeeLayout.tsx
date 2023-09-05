@@ -1,26 +1,26 @@
-import api from "@/instance/api";
-import { OPTIONS } from "@/mock/Options";
-import Button from "@/ui/form/Button";
-import CustomSelect from "@/ui/form/CustomSelect";
-import Input from "@/ui/form/Input";
-import { URLS } from "@/utils/URLS";
-import { handleApiError } from "@/utils/hanldeApiError";
-import { FeeDataState, OptionType } from "@/utils/types";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import api from '@/instance/api';
+import { OPTIONS } from '@/mock/Options';
+import Button from '@/ui/form/Button';
+import CustomSelect from '@/ui/form/CustomSelect';
+import Input from '@/ui/form/Input';
+import { URLS } from '@/utils/URLS';
+import { handleApiError } from '@/utils/hanldeApiError';
+import { FeeDataState, OptionType } from '@/utils/types';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const AddFeeLayout = () => {
   const [loading, setloading] = useState(false);
   const router = useRouter();
   const initialData = {
-    name: "",
-    percentage: "",
+    name: '',
+    percentage: '',
     draft: true,
   };
   const [feeData, setFeeData] = useState<FeeDataState>(initialData);
   const params = useSearchParams();
-  const id = params.get("id");
+  const id = params.get('id');
   useEffect(() => {
     const getTax = async () => {
       try {
@@ -40,10 +40,10 @@ const AddFeeLayout = () => {
     if ((feeData.name, feeData.percentage)) {
       try {
         setloading(true);
-        const { data } = await api.post("/tax/create", feeData);
+        const { data } = await api.post('/tax/create', feeData);
         if (data) {
           setFeeData(initialData);
-          toast.success("Tax added Successfully");
+          toast.success('Tax added Successfully');
           setloading(false);
         }
       } catch (error) {
@@ -53,7 +53,7 @@ const AddFeeLayout = () => {
         setloading(false);
       }
     } else {
-      toast.error("Please fill the fields");
+      toast.error('Please fill the fields');
     }
   };
   const handleUpdateFee = async () => {
@@ -63,9 +63,9 @@ const AddFeeLayout = () => {
         const { data } = await api.patch(`/tax/update/${id}`, feeData);
         if (data) {
           setFeeData(initialData);
-          toast.success("Tax updated Successfully");
+          toast.success('Tax updated Successfully');
           setloading(false);
-          router.push(URLS.TAXES);
+          router.back();
         }
       } catch (error) {
         const err = handleApiError(error);
@@ -74,7 +74,7 @@ const AddFeeLayout = () => {
         setloading(false);
       }
     } else {
-      toast.error("Please fill the fields");
+      toast.error('Please fill the fields');
     }
   };
   return (
@@ -119,7 +119,7 @@ const AddFeeLayout = () => {
               value={
                 feeData.draft || feeData.draft === false
                   ? OPTIONS.find((el) => el.value === feeData.draft.toString())
-                  : { label: "Draft", value: "true" }
+                  : { label: 'Draft', value: 'true' }
               }
               onChange={(e: OptionType) =>
                 setFeeData({ ...feeData, draft: e.value })
@@ -140,7 +140,7 @@ const AddFeeLayout = () => {
             }}
             className="bg-brand_yellow-500 h-10 py-0 border-none w-full lg:w-1/3 "
           >
-            {id ? "Update" : "Save"}
+            {id ? 'Update' : 'Save'}
           </Button>
         </div>
       </div>

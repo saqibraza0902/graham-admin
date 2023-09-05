@@ -1,22 +1,22 @@
-import api from "@/instance/api";
-import { OPTIONS } from "@/mock/Options";
-import Button from "@/ui/form/Button";
-import CustomSelect from "@/ui/form/CustomSelect";
-import Input from "@/ui/form/Input";
-import { URLS } from "@/utils/URLS";
-import { handleApiError } from "@/utils/hanldeApiError";
-import { BrandDataState, OptionType } from "@/utils/types";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import api from '@/instance/api';
+import { OPTIONS } from '@/mock/Options';
+import Button from '@/ui/form/Button';
+import CustomSelect from '@/ui/form/CustomSelect';
+import Input from '@/ui/form/Input';
+import { URLS } from '@/utils/URLS';
+import { handleApiError } from '@/utils/hanldeApiError';
+import { BrandDataState, OptionType } from '@/utils/types';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const AddBrandLayout = () => {
   const [loading, setloading] = useState(false);
   const params = useSearchParams();
   const router = useRouter();
-  const id = params.get("id");
+  const id = params.get('id');
   const initialData = {
-    name: "",
+    name: '',
     draft: true,
   };
   const [stateValues, setStateValues] = useState<BrandDataState>(initialData);
@@ -39,11 +39,11 @@ const AddBrandLayout = () => {
     if (stateValues.name) {
       try {
         setloading(true);
-        const { data } = await api.post("/brand/create", stateValues);
+        const { data } = await api.post('/brand/create', stateValues);
         if (data) {
           setloading(false);
           setStateValues(initialData);
-          toast.success("Brand added Successfully");
+          toast.success('Brand added Successfully');
         }
       } catch (error) {
         const err = handleApiError(error);
@@ -52,7 +52,7 @@ const AddBrandLayout = () => {
         setloading(false);
       }
     } else {
-      toast.error("Please fill the fields");
+      toast.error('Please fill the fields');
     }
   };
   const handleUpdateBrand = async () => {
@@ -63,8 +63,8 @@ const AddBrandLayout = () => {
         if (data) {
           setloading(false);
           setStateValues(initialData);
-          router.push(URLS.BRAND);
-          toast.success("Brand updated Successfully");
+          router.back();
+          toast.success('Brand updated Successfully');
         }
       } catch (error) {
         const err = handleApiError(error);
@@ -73,7 +73,7 @@ const AddBrandLayout = () => {
         setloading(false);
       }
     } else {
-      toast.error("Please fill the fields");
+      toast.error('Please fill the fields');
     }
   };
   return (
@@ -106,7 +106,7 @@ const AddBrandLayout = () => {
                   ? OPTIONS.find(
                       (el) => el.value === stateValues.draft.toString()
                     )
-                  : { label: "Draft", value: "true" }
+                  : { label: 'Draft', value: 'true' }
               }
               onChange={(e: OptionType) =>
                 setStateValues({ ...stateValues, draft: e.value })
@@ -128,7 +128,7 @@ const AddBrandLayout = () => {
             }}
             className="bg-brand_yellow-500 border-none w-full h-10 py-0 lg:w-1/3 "
           >
-            {id ? "Update" : "Save"}
+            {id ? 'Update' : 'Save'}
           </Button>
         </div>
       </div>

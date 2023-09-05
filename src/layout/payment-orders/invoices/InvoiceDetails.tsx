@@ -3,11 +3,15 @@ import Button from "@/ui/form/Button";
 import { formatCurrency } from "@/utils/currencyFormat";
 import { Order } from "@/utils/orderTypes";
 import React from "react";
-
+import { useReactToPrint } from 'react-to-print';
 interface IDetailsProp {
   item: Order;
 }
 const InvoiceDetails = ({ item }: IDetailsProp) => {
+  const componentRef = React.useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
   const period = () => {
     return (
       <>
@@ -75,11 +79,11 @@ const InvoiceDetails = ({ item }: IDetailsProp) => {
         <h1 className="text-lg font-semibold">
           Invoice No. : <span className="text-brand_grey-200">#{item._id}</span>
         </h1>
-        <Button className="border border-brand_purple-500 text-brand_purple-500 font-semibold bg-transparent h-10 p-0 w-32">
+        <Button onClick={handlePrint} className="border border-brand_purple-500 text-brand_purple-500 font-semibold bg-transparent h-10 p-0 w-32">
           Print
         </Button>
       </div>
-      <div className="mt-8 space-y-4 p-6">
+      <div className="mt-8 space-y-4 p-6" ref={componentRef}>
         {INVOICE_DETAILS.map((item, index) => (
           <div className="flex items-center gap-10" key={index}>
             <h1 className="font-semibold text-sm w-28 whitespace-nowrap">

@@ -60,9 +60,9 @@ export const SidebarContent = () => {
     },
     {
       icon: <CashIcon />,
-      title: 'Payout Requests',
+      title: 'Payouts',
       prefix: 'payout-requests',
-      pathname: URLS.PAYOUT_REQUESTS,
+      pathname: URLS.PAYOUT_REQUESTS_PENDING,
     },
     {
       icon: <CashIcon />,

@@ -10,8 +10,8 @@ export const URLS = {
 
   BUYER: '/buyer?page=1',
   BUYER_PROFILE: '/buyer/buyer-profile',
-  BUYER_BOOKING: '/buyer/buyer-booking?page=1',
-  BUYER_INVOICE: '/buyer/buyer-invoice?page=1',
+  BUYER_BOOKING: '/buyer/buyer-booking',
+  BUYER_INVOICE: '/buyer/buyer-invoice',
 
   CATEGORIES: '/categories?page=1',
   SUB_CATEGORY: '/categories/sub-category',
@@ -43,4 +43,6 @@ export const URLS = {
 
   SUBSCRIPTION: '/subscription?page=1',
   ADD_SUBSCRIPTION: '/subscription/add-subs',
+  PAYOUT_REQUESTS_PENDING: '/payout-requests/pending',
+  PAYOUT_REQUESTS_HISTORY: '/payout-requests/history',
 };

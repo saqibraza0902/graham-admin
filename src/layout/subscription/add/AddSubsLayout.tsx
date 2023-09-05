@@ -1,25 +1,25 @@
-import api from "@/instance/api";
-import { OPTIONS } from "@/mock/Options";
-import { DURATION, PLANS } from "@/mock/SubsOptions";
-import Button from "@/ui/form/Button";
-import CustomSelect from "@/ui/form/CustomSelect";
-import Input from "@/ui/form/Input";
-import { URLS } from "@/utils/URLS";
-import { handleApiError } from "@/utils/hanldeApiError";
-import { OptionType, SubsDataState } from "@/utils/types";
-import { useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import api from '@/instance/api';
+import { OPTIONS } from '@/mock/Options';
+import { DURATION, PLANS } from '@/mock/SubsOptions';
+import Button from '@/ui/form/Button';
+import CustomSelect from '@/ui/form/CustomSelect';
+import Input from '@/ui/form/Input';
+import { URLS } from '@/utils/URLS';
+import { handleApiError } from '@/utils/hanldeApiError';
+import { OptionType, SubsDataState } from '@/utils/types';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 const AddSubsLayout = () => {
   const params = useSearchParams();
   const router = useRouter();
-  const id = params.get("id");
+  const id = params.get('id');
   const initialState: SubsDataState = {
-    name: "",
-    duration_in_days: "",
+    name: '',
+    duration_in_days: '',
     draft: true,
-    amount: "",
+    amount: '',
   };
   const [statevalues, setStateValues] = useState(initialState);
   const [loading, setloading] = useState(false);
@@ -49,10 +49,10 @@ const AddSubsLayout = () => {
       };
       try {
         setloading(true);
-        const { data } = await api.post("/subscription/create", newdata);
+        const { data } = await api.post('/subscription/create', newdata);
         if (data) {
           setStateValues(initialState);
-          toast.success("Plan Added successfully");
+          toast.success('Plan Added successfully');
         }
       } catch (error) {
         const err = handleApiError(error);
@@ -61,7 +61,7 @@ const AddSubsLayout = () => {
         setloading(false);
       }
     } else {
-      toast.error("Please fill the fields");
+      toast.error('Please fill the fields');
     }
   };
 
@@ -78,8 +78,8 @@ const AddSubsLayout = () => {
         const { data } = await api.patch(`/subscription/update/${id}`, newdata);
         if (data) {
           setStateValues(initialState);
-          toast.success("Plan updated successfully");
-          router.push(URLS.SUBSCRIPTION);
+          toast.success('Plan updated successfully');
+          router.back();
         }
       } catch (error) {
         const err = handleApiError(error);
@@ -88,7 +88,7 @@ const AddSubsLayout = () => {
         setloading(false);
       }
     } else {
-      toast.error("Please fill the fields");
+      toast.error('Please fill the fields');
     }
   };
   return (
@@ -159,7 +159,7 @@ const AddSubsLayout = () => {
                   ? OPTIONS.find(
                       (el) => el.value === statevalues.draft.toString()
                     )
-                  : { label: "Draft", value: "true" }
+                  : { label: 'Draft', value: 'true' }
               }
               onChange={(e: OptionType) =>
                 setStateValues({ ...statevalues, draft: e.value })
@@ -198,7 +198,7 @@ const AddSubsLayout = () => {
             }}
             className="bg-brand_yellow-500 border-none w-full h-10 py-0 lg:w-1/3 "
           >
-            {id ? "Update" : "Save"}
+            {id ? 'Update' : 'Save'}
           </Button>
         </div>
       </div>

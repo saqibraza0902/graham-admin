@@ -1,12 +1,12 @@
-'use client';
-import CommonLayout from '@/layout/CommonLayout';
-import Cards from '@/layout/dashboard/Cards';
-import React from 'react';
-import { CartIcon, CashIconLarge, PersonLarge, PersonsLarge } from '@/ui/icons';
-import { CardsArray } from '@/mock/Cards';
+"use client";
+import CommonLayout from "@/layout/CommonLayout";
+import Cards from "@/layout/dashboard/Cards";
+import React from "react";
+import { CartIcon, CashIconLarge, PersonLarge, PersonsLarge } from "@/ui/icons";
+import { CardsArray } from "@/mock/Cards";
 const Dashboard = () => {
   return (
-    <CommonLayout className="overflow-hidden">
+    <CommonLayout input={true} className="overflow-hidden">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 w-full">
         {CardsArray.map((el, index) => (
           <Cards key={index} Icon={el.Icon} iconcolor={el.color}>

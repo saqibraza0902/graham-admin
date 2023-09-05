@@ -113,12 +113,14 @@ const TableRow = ({
           <span className="!capitalize">{item.prices.rented_as}</span>
         </td>
         <td className="px-4 py-3 text-center">
-          <FormattedDate date={item.start_date} />
+          {item?.start_date ? <FormattedDate date={item?.start_date} /> : '---'}
         </td>
         <td className="px-4 py-3 text-center">
           {PLANS.map((el) => {
             if (el.value === item.plan.name) {
               return el.label;
+            } else {
+              return '-';
             }
           })}
         </td>

@@ -1,3 +1,4 @@
+import { PAYOUT_PAYMENT_STATUS_ENUM, PAYOUT_TYPE_ENUM } from "./enum";
 import { BillingDetails, IProduct, ProcessStatus } from "./orderTypes";
 
 export interface OptionType {
@@ -369,4 +370,20 @@ export interface ILatestProduct {
 }
 export interface IBuyer extends IUser {
   latestProduct: ILatestProduct;
+}
+
+
+export interface ITimeStamps {
+  createdAt: string
+  updatedAt: string
+}
+export interface IPayoutRequest extends ITimeStamps {
+  _id: string
+  payout_type: PAYOUT_TYPE_ENUM
+  user: string
+  order_id: string
+  payout_amount: number
+  payout_stripe_id: string
+  payment_status: PAYOUT_PAYMENT_STATUS_ENUM
+  user_account: string
 }
